@@ -43,7 +43,6 @@ class App extends React.Component {
        }
      }
 
-     console.log('emptry', squares.filter(s => typeof s === 'number'))
      if (squares.filter(s => typeof s === 'number').length === 0) { return 'Tie Game' }
      return null
    }
