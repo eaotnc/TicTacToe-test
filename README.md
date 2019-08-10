@@ -1,5 +1,7 @@
 Tic Tic Toe test 
 for interview 
+with ReactJs
+By Thanatcha Sangphet
 
 -it can Play with Ai and 2 player
 -have a test with enzyme
