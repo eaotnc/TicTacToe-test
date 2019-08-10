@@ -89,3 +89,14 @@
   text-align: center;
   margin-bottom: 20px;
 }
+.game-mode-bt{
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-around;
+}
+.game-mode{
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}

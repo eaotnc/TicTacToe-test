@@ -1,22 +1,26 @@
 import React from 'react'
-import logo from './logo.svg'
+import { Button } from 'antd'
+import 'antd/dist/antd.css'
 import './App.css'
 import Board from './board'
 import BestMoveSpotFuntion from './util/BestMoveSpotFuntion'
+import logo from './logo.svg'
+import './index.css'
 
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       squares: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-      humanTurn: true,
+      oTurn: true,
       countTern: 0,
+      mode: '1 Player',
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { countTern, humanTurn } = this.state
-    if (countTern > 0 && !humanTurn) {
+    const { countTern, oTurn, mode } = this.state
+    if (countTern > 0 && !oTurn && mode === '1 Player') {
       this.handleComputerTurn()
     }
   }
@@ -45,42 +49,48 @@ class App extends React.Component {
    initState=() => {
      this.setState({
        squares: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-       humanTurn: true,
+       oTurn: true,
        countTern: 0,
+       mode: '1 Player',
      })
    }
 
+   handleChangeMode=async (mode) => {
+     await this.initState()
+     this.setState({ mode })
+   }
+
    handleComputerTurn=() => {
-     const { humanTurn, squares } = this.state
+     const { oTurn, squares } = this.state
      const computerBestMove = BestMoveSpotFuntion(squares).index
      squares[computerBestMove] = 'X'
      this.setState({
        squares,
-       humanTurn: !humanTurn,
+       oTurn: !oTurn,
        countTern: this.state.countTern += 1,
      })
    }
 
    handleClick= (i) => {
-     const { squares, humanTurn } = this.state
+     const { squares, oTurn } = this.state
      if (!this.handleCalculateWinner(squares) && squares[i] !== 'X') {
-       squares[i] = 'O'
+       squares[i] = oTurn ? 'O' : 'X'
        this.setState({
          squares,
-         humanTurn: !humanTurn,
+         oTurn: !oTurn,
          countTern: this.state.countTern += 1,
        })
      }
    }
 
    render() {
-     const { squares, humanTurn } = this.state
+     const { squares, oTurn, mode } = this.state
      const winner = this.handleCalculateWinner(squares)
      let status
      if (winner) {
        status = `Winner: ${winner}`
      } else {
-       status = `${humanTurn ? 'O' : 'X'} : turn`
+       status = `${oTurn ? 'O' : 'X'} : turn`
      }
 
      return (
@@ -94,7 +104,26 @@ class App extends React.Component {
          </div>
          <div className="game-info">
            <div>{status}</div>
-           <button onClick={this.initState} type="button"> Re Start </button>
+           <Button onClick={this.initState}> Re Start </Button>
+         </div>
+         <div className="game-mode">
+            GAME MODE:
+           {' '}
+           {mode}
+         </div>
+         <div className="game-mode-bt">
+
+           <Button
+             onClick={() => this.handleChangeMode('1 Player')}
+           >
+                1 Player
+           </Button>
+           <Button
+             onClick={() => this.handleChangeMode('2 Player')}
+           >
+                2 Player
+           </Button>
+
          </div>
        </div>
      )
