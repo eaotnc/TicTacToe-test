@@ -8,18 +8,22 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      history: [
-        {
-        //   squares: Array(9).fill(0),
-          squares: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-        },
-      ],
-      stepNumber: 0,
-      xIsNext: true,
+      //   squares: Array(9).fill(0),
+      squares: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+      humenTurn: true,
+      countTern: 0,
     }
   }
 
-   calculateWinner=(squares) => {
+  componentDidUpdate(prevProps, prevState) {
+    const { countTern, humenTurn } = this.state
+    console.log('prevProps,prevState', prevState)
+    if (countTern > 0 && !humenTurn) {
+      this.handleComputerTurn()
+    }
+  }
+
+   handleCalculateWinner=(squares) => {
      const lines = [
        [0, 1, 2],
        [3, 4, 5],
@@ -40,71 +44,61 @@ class App extends React.Component {
      return null
    }
 
-   emptrySpot=boards => boards.map((board, index) => { if (board !== 'O' && board !== 'X') return index }).filter(re => re)
-
-   handleClick(i) {
-     const history = this.state.history.slice(0, this.state.stepNumber + 1)
-     console.log('history', history)
-
-     const current = history[history.length - 1]
-     const squares = current.squares.slice()
-     if (this.calculateWinner(squares) || squares[i]) {
-       return
-     }
-     squares[i] = this.state.xIsNext ? 'X' : 'O'
+   initState=() => {
      this.setState({
-       history: history.concat([
-         {
-           squares,
-         },
-       ]),
-       stepNumber: history.length,
-       xIsNext: !this.state.xIsNext,
+       squares: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+       humenTurn: true,
+       countTern: 0,
      })
    }
 
-   jumpTo(step) {
+   handleComputerTurn=() => {
+     const { humenTurn, squares } = this.state
+     const computerBestMove = BestMoveSpotFuntion(squares).index
+     console.log('computerBestMove', computerBestMove)
+     squares[computerBestMove] = 'X'
      this.setState({
-       stepNumber: step,
-       xIsNext: (step % 2) === 0,
+       squares,
+       humenTurn: !humenTurn,
+       countTern: this.state.countTern += 1,
      })
+   }
+
+   handleClick= (i) => {
+     const { squares, humenTurn } = this.state
+     squares[i] = humenTurn ? 'O' : 'X'
+     if (!this.handleCalculateWinner(squares)) {
+       this.setState({
+         squares,
+         humenTurn: !humenTurn,
+         countTern: this.state.countTern += 1,
+       })
+     }
    }
 
    render() {
-     const { history } = this.state
-     const current = history[this.state.stepNumber]
-     const winner = this.calculateWinner(current.squares)
-
-     const moves = history.map((step, move) => {
-       const desc = move
-         ? `Go to move #${move}`
-         : 'Go to game start'
-       return (
-         <li key={move}>
-           <button onClick={() => this.jumpTo(move)}>{desc}</button>
-         </li>
-       )
-     })
+     console.log('render')
+     const { squares, humenTurn } = this.state
+     const winner = this.handleCalculateWinner(squares)
 
      let status
      if (winner) {
        status = `Winner: ${winner}`
      } else {
-       status = `Next player: ${this.state.xIsNext ? 'X' : 'O'}`
+       status = `${humenTurn ? 'O' : 'X'} : turn`
      }
-     console.log('this.state', this.state.history[this.state.stepNumber].squares, this.state.stepNumber)
-     console.log('BestMoveSpotFuntion', BestMoveSpotFuntion(this.state.history[this.state.stepNumber].squares))
-     //  console.log('emptrySpot', this.emptrySpot(this.state.history[this.state.stepNumber].squares))
+
      return (
        <div className="game">
          <div className="game-board">
            <Board
-             squares={current.squares}
+             squares={squares}
              onClick={i => this.handleClick(i)}
            />
          </div>
          <div className="game-info">
            <div>{status}</div>
+           <button onClick={this.initState} type="button"> Re Start </button>
          </div>
        </div>
      )
