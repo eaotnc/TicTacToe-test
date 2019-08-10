@@ -76,5 +76,16 @@
 }
 
 .game-info {
-  margin-left: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  margin: auto;
+  width: 98px;
+  margin-bottom: 20px;
+}
+
+.game-title{
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
 }

@@ -2,23 +2,21 @@ import React from 'react'
 import logo from './logo.svg'
 import './App.css'
 import Board from './board'
-import BestMoveSpotFuntion from './BestMoveSpotFuntion'
+import BestMoveSpotFuntion from './util/BestMoveSpotFuntion'
 
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      //   squares: Array(9).fill(0),
       squares: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-      humenTurn: true,
+      humanTurn: true,
       countTern: 0,
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { countTern, humenTurn } = this.state
-    console.log('prevProps,prevState', prevState)
-    if (countTern > 0 && !humenTurn) {
+    const { countTern, humanTurn } = this.state
+    if (countTern > 0 && !humanTurn) {
       this.handleComputerTurn()
     }
   }
@@ -28,13 +26,13 @@ class App extends React.Component {
        [0, 1, 2],
        [3, 4, 5],
        [6, 7, 8],
-
        [0, 3, 6],
        [1, 4, 7],
        [2, 5, 8],
        [0, 4, 8],
        [2, 4, 6],
      ]
+
      for (let i = 0; i < lines.length; i++) {
        const [a, b, c] = lines[i]
        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
@@ -47,49 +45,47 @@ class App extends React.Component {
    initState=() => {
      this.setState({
        squares: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-       humenTurn: true,
+       humanTurn: true,
        countTern: 0,
      })
    }
 
    handleComputerTurn=() => {
-     const { humenTurn, squares } = this.state
+     const { humanTurn, squares } = this.state
      const computerBestMove = BestMoveSpotFuntion(squares).index
-     console.log('computerBestMove', computerBestMove)
      squares[computerBestMove] = 'X'
      this.setState({
        squares,
-       humenTurn: !humenTurn,
+       humanTurn: !humanTurn,
        countTern: this.state.countTern += 1,
      })
    }
 
    handleClick= (i) => {
-     const { squares, humenTurn } = this.state
-     squares[i] = humenTurn ? 'O' : 'X'
-     if (!this.handleCalculateWinner(squares)) {
+     const { squares, humanTurn } = this.state
+     if (!this.handleCalculateWinner(squares) && squares[i] !== 'X') {
+       squares[i] = 'O'
        this.setState({
          squares,
-         humenTurn: !humenTurn,
+         humanTurn: !humanTurn,
          countTern: this.state.countTern += 1,
        })
      }
    }
 
    render() {
-     console.log('render')
-     const { squares, humenTurn } = this.state
+     const { squares, humanTurn } = this.state
      const winner = this.handleCalculateWinner(squares)
-
      let status
      if (winner) {
        status = `Winner: ${winner}`
      } else {
-       status = `${humenTurn ? 'O' : 'X'} : turn`
+       status = `${humanTurn ? 'O' : 'X'} : turn`
      }
 
      return (
        <div className="game">
+         <div className="game-title">Tic Tac Toe Game</div>
          <div className="game-board">
            <Board
              squares={squares}
