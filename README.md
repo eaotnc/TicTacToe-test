@@ -3,8 +3,8 @@ for interview
 with ReactJs
 By Thanatcha Sangphet
 
--it can Play with Ai and 2 player
--have a test with enzyme
+it can Play with Ai and 2 player
+and have a test with enzyme
 
 how to install 
 1. git clone git@github.com:eaotnc/TicTacToe-test.git
