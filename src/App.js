@@ -2,6 +2,7 @@ import React from 'react'
 import logo from './logo.svg'
 import './App.css'
 import Board from './board'
+import BestMoveSpotFuntion from './BestMoveSpotFuntion'
 
 class App extends React.Component {
   constructor(props) {
@@ -9,7 +10,8 @@ class App extends React.Component {
     this.state = {
       history: [
         {
-          squares: Array(9).fill(null),
+        //   squares: Array(9).fill(0),
+          squares: [0, 1, 2, 3, 4, 5, 6, 7, 8],
         },
       ],
       stepNumber: 0,
@@ -22,6 +24,7 @@ class App extends React.Component {
        [0, 1, 2],
        [3, 4, 5],
        [6, 7, 8],
+
        [0, 3, 6],
        [1, 4, 7],
        [2, 5, 8],
@@ -37,8 +40,12 @@ class App extends React.Component {
      return null
    }
 
+   emptrySpot=boards => boards.map((board, index) => { if (board !== 'O' && board !== 'X') return index }).filter(re => re)
+
    handleClick(i) {
      const history = this.state.history.slice(0, this.state.stepNumber + 1)
+     console.log('history', history)
+
      const current = history[history.length - 1]
      const squares = current.squares.slice()
      if (this.calculateWinner(squares) || squares[i]) {
@@ -85,7 +92,9 @@ class App extends React.Component {
      } else {
        status = `Next player: ${this.state.xIsNext ? 'X' : 'O'}`
      }
-
+     console.log('this.state', this.state.history[this.state.stepNumber].squares, this.state.stepNumber)
+     console.log('BestMoveSpotFuntion', BestMoveSpotFuntion(this.state.history[this.state.stepNumber].squares))
+     //  console.log('emptrySpot', this.emptrySpot(this.state.history[this.state.stepNumber].squares))
      return (
        <div className="game">
          <div className="game-board">
@@ -96,7 +105,6 @@ class App extends React.Component {
          </div>
          <div className="game-info">
            <div>{status}</div>
-           <ol>{moves}</ol>
          </div>
        </div>
      )

@@ -1,0 +1,46 @@
+{
+    "env": {
+      "es6": true,
+      "browser": true,
+      "jest": true
+    },
+    "parser": "babel-eslint",
+    "extends": "airbnb",
+    "rules": {
+      "react/prefer-stateless-function": [
+        2,
+        {
+          "ignorePureComponents": true
+        }
+      ],
+      "linebreak-style": ["error", "windows"],
+      "semi": [
+        2,
+        "never"
+      ],
+      "comma-dangle": [
+        "error",
+        "always-multiline"
+      ],
+      "react/jsx-filename-extension": 0,
+      "no-multiple-empty-lines": [
+        "error",
+        {
+          "max": 1,
+          "maxEOF": 1,
+          "maxBOF": 0
+        }
+      ],
+      "jsx-a11y/anchor-is-valid": [
+        "error",
+        {
+          "components": [
+            "Link"
+          ],
+          "specialLink": [
+            "to"
+          ]
+        }
+      ]
+    }
+  }
