@@ -1,4 +1,4 @@
-const BestMoveSpotFuntion = (origBoard) => {
+const bestMoveSpotFuntion = (origBoard) => {
   const humanPlayer = 'O'
   const aiPlayer = 'X'
 
@@ -80,4 +80,4 @@ const BestMoveSpotFuntion = (origBoard) => {
 
   return minimax(origBoard, aiPlayer)
 }
-export default BestMoveSpotFuntion
+export default bestMoveSpotFuntion

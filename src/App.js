@@ -3,8 +3,7 @@ import { Button } from 'antd'
 import 'antd/dist/antd.css'
 import './App.css'
 import Board from './board'
-import BestMoveSpotFuntion from './util/BestMoveSpotFuntion'
-import logo from './logo.svg'
+import bestMoveSpotFuntion from './util/BestMoveSpotFuntion'
 import './index.css'
 
 class App extends React.Component {
@@ -43,6 +42,9 @@ class App extends React.Component {
          return squares[a]
        }
      }
+
+     console.log('emptry', squares.filter(s => typeof s === 'number'))
+     if (squares.filter(s => typeof s === 'number').length === 0) { return 'Tie Game' }
      return null
    }
 
@@ -51,7 +53,6 @@ class App extends React.Component {
        squares: [0, 1, 2, 3, 4, 5, 6, 7, 8],
        oTurn: true,
        countTern: 0,
-       mode: '1 Player',
      })
    }
 
@@ -62,7 +63,7 @@ class App extends React.Component {
 
    handleComputerTurn=() => {
      const { oTurn, squares } = this.state
-     const computerBestMove = BestMoveSpotFuntion(squares).index
+     const computerBestMove = bestMoveSpotFuntion(squares).index
      squares[computerBestMove] = 'X'
      this.setState({
        squares,
@@ -73,6 +74,7 @@ class App extends React.Component {
 
    handleClick= (i) => {
      const { squares, oTurn } = this.state
+
      if (!this.handleCalculateWinner(squares) && squares[i] !== 'X') {
        squares[i] = oTurn ? 'O' : 'X'
        this.setState({
@@ -85,12 +87,14 @@ class App extends React.Component {
 
    render() {
      const { squares, oTurn, mode } = this.state
-     const winner = this.handleCalculateWinner(squares)
-     let status
-     if (winner) {
-       status = `Winner: ${winner}`
+     const status = this.handleCalculateWinner(squares)
+     let statusText
+     if (status === 'Tie Game') {
+       statusText = 'Tie Game'
+     } else if (status === 'X' || status === 'O') {
+       statusText = `Winner: ${status}`
      } else {
-       status = `${oTurn ? 'O' : 'X'} : turn`
+       statusText = `${oTurn ? 'O' : 'X'} : turn`
      }
 
      return (
@@ -103,7 +107,7 @@ class App extends React.Component {
            />
          </div>
          <div className="game-info">
-           <div>{status}</div>
+           <div>{statusText}</div>
            <Button onClick={this.initState}> Re Start </Button>
          </div>
          <div className="game-mode">
